@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ai-coder - Your AI Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: -apple-system, sans-serif;
+            max-width: 100%;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .chat-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .messages {
+            height: 60vh;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            background: #fafafa;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+        .user {
+            background: #007AFF;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        .assistant {
+            background: #e5e5ea;
+            color: black;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+        button:disabled {
+            background: #ccc;
+        }
+        h1 {
+            color: #007AFF;
+            text-align: center;
+        }
+        .typing {
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 Ai-coder</h1>
+    <div class="chat-container">
+        <div class="messages" id="messages">
+            <div class="message assistant">
+                Hi! I'm Ai-coder, your personal AI assistant. How can I help you today?
+            </div>
+        </div>
+        <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const messages = [
+            {role: 'assistant', content: "Hi! I'm Ai-coder, your personal AI assistant. How can I help you today?"}
+        ];
+
+        function addMessage(role, content) {
+            messages.push({role, content});
+            const messagesDiv = document.getElementById('messages');
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            messageDiv.textContent = content;
+            messagesDiv.appendChild(messageDiv);
+            
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addMessage('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant typing';
+            typingDiv.textContent = 'Ai-coder is thinking...';
+            document.getElementById('messages').appendChild(typingDiv);
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+            
+            // Simulate AI response (this is a demo - no API needed!)
+            setTimeout(() => {
+                typingDiv.remove();
+                
+                // Simple responses based on user input
+                let response;
+                if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hi')) {
+                    response = "Hello! How can I help you today?";
+                } else if (message.toLowerCase().includes('code') || message.toLowerCase().includes('python')) {
+                    response = "I can help with code! Here's a Python example:\n\n```python\nprint('Hello World!')\n```";
+                } else if (message.toLowerCase().includes('name')) {
+                    response = "I'm Ai-coder, your personal AI assistant!";
+                } else if (message.toLowerCase().includes('thank')) {
+                    response = "You're welcome! Is there anything else I can help with?";
+                } else {
+                    response = `I understand you said: "${message}". I'm a demo AI - in the full version, I can code, build apps, and use real AI services!`;
+                }
+                
+                addMessage('assistant', response);
+            }, 1000);
+        }
+
+        // Allow sending with Enter key
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Focus on input when page loads
+        document.getElementById('userInput').focus();
+    </script>
+</body>
+</html>
